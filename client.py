@@ -7,8 +7,8 @@
 import Pyro4
 import pyglet
 
-ipAddressServer = "10.19.38.66" # TODO add your server remote IP here
-#ipAddressServer = "localhoss"
+#ipAddressServer = "10.19.38.66" # TODO add your server remote IP here
+ipAddressServer = "localhost"
 
 job_server = Pyro4.core.Proxy('PYRO:Greeting@' + ipAddressServer + ':9090')
 
@@ -35,7 +35,7 @@ def lookforjob(dt):
         pyglet.clock.schedule_interval_soft(lookforjob, 2)
 
     else:
-        print("Got a job")
+        print("Got a job", job)
         joboutput = doJob(job)
         print(joboutput)
         job_server.return_job_results(joboutput)

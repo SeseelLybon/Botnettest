@@ -55,4 +55,5 @@ class Main_manager:
                 return
             else:
                 print("Not all jobs are done...")
+                print(self.local_job_server.get_jobs_amount())
                 time.sleep(5)

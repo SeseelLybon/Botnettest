@@ -30,7 +30,7 @@ def int_deconstructor(a):
     isRunning = True
     decs = 1
     while isRunning:
-        if (a%(decs*10)//decs)*decs == 0:
+        if (a%(decs*10)//decs)*decs == 0 and decs > a:
             isRunning = False
             continue
 
@@ -63,6 +63,9 @@ class Job_server(object):
     def get_jobs_results(self):
         return self.job_results
 
+    def get_jobs_amount(self):
+        return len(self.jobs)
+
     def set_jobs(self, jobs):
         self.jobs = jobs
 
@@ -82,18 +85,20 @@ class Job_server(object):
 
 
 if __name__ == "__main__":
-    server_IP = "10.19.38.66"
-    #server_IP = "localhost"
+    #server_IP = "10.19.38.66"
+    server_IP = "localhost"
     print("Starting server.py as __main__")
 
     #lhs = int(sys.argv[1])
     #rhs = int(sys.argv[2])
-    lhs = 123456789101112131415
-    rhs = 151413121110987654321
+    lhs = 2**100
+    rhs = 3**100
 
     print(lhs,"*",rhs,"=",str(lhs*rhs))
 
     jobbers = job_creator(lhs, rhs)
+
+    print(jobbers)
 
     job_server_o = Job_server(jobbers)
 
