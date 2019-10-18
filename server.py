@@ -38,13 +38,12 @@ def int_deconstructor(a):
         decs*=10
     return dec_places
 
+
 @Pyro4.expose
 class Job_server(object):
 
-
-
     def __init__(self, jobs):
-        self.workers = []
+        self.workers:dict = {}
         self.isDone = False
         self.job_results = []
         self.jobs = jobs
@@ -66,22 +65,33 @@ class Job_server(object):
     def get_jobs_amount(self):
         return len(self.jobs)
 
+    def get_amount_workers(self):
+        print(len(self.workers))
+        return len(self.workers)
+
     def set_jobs(self, jobs):
         self.jobs = jobs
 
     def return_job_results(self, job_out):
         self.job_results.append(job_out)
 
-    def register_worker(self, newworker, callback):
-        self.workers.append((newworker, callback))
-        print("Worker registered to labour force", newworker, callback)
+    def register_worker(self, workerid, slots):
+        self.workers[workerid] = Worker(workerid, slots)
+        print("Worker registered to labour force", workerid,"for", slots,"slots")
+        print("There are now", len(self.workers), "workers")
 
-    def unregister_worker(self, oldworker):
-        for w, c in self.workers:
-            if w == oldworker:
-                self.workers.remove((w, c))
-                print("Worker", oldworker, "left the labour force")
-                break
+    def unregister_worker(self, workerid):
+        del self.workers[workerid]
+        print("Worker", workerid, "was removed from the labour force")
+
+
+@Pyro4.expose
+class Worker:
+    def __init__(self, workerID, work_slots):
+        self.workerID = workerID
+        self.work_slots = work_slots
+        self.hasClaimedSlots = False
+        self.hasReturnedResults = False
 
 
 if __name__ == "__main__":
@@ -91,8 +101,8 @@ if __name__ == "__main__":
 
     #lhs = int(sys.argv[1])
     #rhs = int(sys.argv[2])
-    lhs = 2**100
-    rhs = 3**100
+    lhs = 2**10
+    rhs = 3**10
 
     print(lhs,"*",rhs,"=",str(lhs*rhs))
 
