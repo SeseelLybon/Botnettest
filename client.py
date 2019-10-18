@@ -10,18 +10,6 @@ import pyglet
 import uuid
 
 
-#ipAddressServer = "10.19.38.66" # TODO add your server remote IP here
-ipAddressServer = "localhost"
-
-job_server = Pyro4.core.Proxy('PYRO:Greeting@' + ipAddressServer + ':9090')
-
-workerid = uuid.uuid1()
-slots = 50
-
-job_server.register_worker(workerid, slots)
-
-#jobless = True
-print("Starting client; waiting for jobs")
 
 def doJob(job):
     return job[0]*job[1]
@@ -49,12 +37,25 @@ def lookforjob(dt):
         pyglet.clock.schedule_interval_soft(lookforjob, 1)
 
 
+if __name__ == '__main__':
+    # ipAddressServer = "10.19.38.66" # TODO add your server remote IP here
+    ipAddressServer = "localhost"
+
+    job_server = Pyro4.core.Proxy('PYRO:Greeting@' + ipAddressServer + ':9090')
+
+    workerid = uuid.uuid1()
+    slots = 50
+
+    job_server.register_worker(workerid, slots)
+    print(job_server.get_workers_amount())
+
+    # jobless = True
+    print("Starting client; waiting for jobs")
+
+    pyglet.clock.schedule_interval_soft(lookforjob, 4)
 
 
-pyglet.clock.schedule_interval_soft(lookforjob, 4)
+    pyglet.app.run()
 
 
-pyglet.app.run()
-
-
-print("Stopping client")
+    print("Stopping client")

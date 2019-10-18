@@ -65,9 +65,12 @@ class Job_server(object):
     def get_jobs_amount(self):
         return len(self.jobs)
 
-    def get_amount_workers(self):
+    def get_workers_amount(self):
         print(len(self.workers))
         return len(self.workers)
+
+    def get_workers(self):
+        return [ x.workerID for x in self.workers.values() ]
 
     def set_jobs(self, jobs):
         self.jobs = jobs
@@ -85,7 +88,6 @@ class Job_server(object):
         print("Worker", workerid, "was removed from the labour force")
 
 
-@Pyro4.expose
 class Worker:
     def __init__(self, workerID, work_slots):
         self.workerID = workerID
